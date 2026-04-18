@@ -1,0 +1,47 @@
+services:
+  app:
+    build: .
+    ports:
+      - "6000:6000"
+    environment:
+      - APP_PORT=6000
+      - NODE_ENV=dev
+      - CORS_ORIGIN=http://localhost:5173,http://localhost:3000
+      - JWT_SECRET_ACCESS_TOKEN=easdawe234e3wqdwd
+      - JWT_SECRET_REFRESH_TOKEN=sadaAE321WQDawdewff
+      - HASH_SECRET=32432wecdsfer23w
+      - API_KEY=123
+      - MAX_FAILED_ATTEMPTS=5
+      - LOCKOUT_DURATION_MINUTES=30
+      - SLIDING_WINDOW_MINUTES=15
+      - RATE_LIMIT_WINDOW_MINUTES=15
+      - RATE_LIMIT_MAX_REQUESTS=5
+      - TOKEN_REFRESH_LIMIT=10
+      - DATABASE_URL=mysql://admin:password@db:3306/todo_db
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: sh -c "npx prisma migrate deploy && npm run dev"
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: todo_db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+
+volumes:
+  db_data:

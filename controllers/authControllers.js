@@ -134,7 +134,7 @@ export const register = async (req, res, next) => {
     });
 
     if (existing) {
-      logAuthFailure(req, email, "Email already registered");
+      logAuthFailure(req, email, "Email already registered ");
       return next(new ApiError(409, "user already registered"));
     }
 
@@ -217,7 +217,7 @@ export const token = async (req, res, next) => {
     logUserAction(
       req,
       { id: user.id, email: user.email },
-      AUDIT_EVENTS.TOKEN_REFRESH
+      AUDIT_EVENTS.TOKEN_REFRESH,
     );
 
     const response = {
@@ -238,7 +238,7 @@ export const token = async (req, res, next) => {
       req,
       "unknown",
       `Token refresh error: ${error.message}`,
-      AUDIT_EVENTS.TOKEN_REFRESH_FAILED
+      AUDIT_EVENTS.TOKEN_REFRESH_FAILED,
     );
     return next(new ApiError(500, "invalid to create token", error));
   }
