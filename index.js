@@ -27,7 +27,7 @@ app.use(
   cors({
     origin: process.env.CORS_ORIGIN.split(","),
     credentials: true,
-  })
+  }),
 );
 
 // use helmet
@@ -40,7 +40,7 @@ app.post("/hash", (req, res) => {
 
 // routes
 // description : to handle different endpoints of the application
-app.use(AuthRoutes);
+app.use("/auth", AuthRoutes);
 app.use(TodoRoutes);
 app.use(TodoItemRoutes);
 app.use(UserRoutes);
