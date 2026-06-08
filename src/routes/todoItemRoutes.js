@@ -6,7 +6,7 @@ import {
   getTodoItems,
   updateTodoItem,
   updateStatusTodoItem,
-} from "../controllers/todoItemControlers.js";
+} from "../controllers/todoItemControllers.js";
 import {
   createOrUpdateTodoItemRules,
   validate,

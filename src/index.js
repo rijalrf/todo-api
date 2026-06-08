@@ -34,6 +34,10 @@ app.use(
 // description : to secure HTTP headers, helps to protect the app from some well-known web vulnerabilities
 app.use(helmet());
 
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "UP", timestamp: new Date().toISOString() });
+});
+
 app.post("/hash", (req, res) => {
   res.json(cryptoHash(req.body.text));
 });
