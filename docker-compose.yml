@@ -2,22 +2,22 @@ services:
   app:
     build: .
     ports:
-      - "6000:6000"
+      - "${APP_PORT}:${APP_PORT}"
     environment:
-      - APP_PORT=6000
-      - NODE_ENV=dev
-      - CORS_ORIGIN=http://localhost:5173,http://localhost:3000
-      - JWT_SECRET_ACCESS_TOKEN=easdawe234e3wqdwd
-      - JWT_SECRET_REFRESH_TOKEN=sadaAE321WQDawdewff
-      - HASH_SECRET=32432wecdsfer23w
-      - API_KEY=123
-      - MAX_FAILED_ATTEMPTS=5
-      - LOCKOUT_DURATION_MINUTES=30
-      - SLIDING_WINDOW_MINUTES=15
-      - RATE_LIMIT_WINDOW_MINUTES=15
-      - RATE_LIMIT_MAX_REQUESTS=5
-      - TOKEN_REFRESH_LIMIT=10
-      - DATABASE_URL=mysql://admin:password@db:3306/todo_db
+      - APP_PORT=${APP_PORT}
+      - NODE_ENV=${NODE_ENV}
+      - CORS_ORIGIN=${CORS_ORIGIN}
+      - JWT_SECRET_ACCESS_TOKEN=${JWT_SECRET_ACCESS_TOKEN}
+      - JWT_SECRET_REFRESH_TOKEN=${JWT_SECRET_REFRESH_TOKEN}
+      - HASH_SECRET=${HASH_SECRET}
+      - API_KEY=${API_KEY}
+      - MAX_FAILED_ATTEMPTS=${MAX_FAILED_ATTEMPTS}
+      - LOCKOUT_DURATION_MINUTES=${LOCKOUT_DURATION_MINUTES}
+      - SLIDING_WINDOW_MINUTES=${SLIDING_WINDOW_MINUTES}
+      - RATE_LIMIT_WINDOW_MINUTES=${RATE_LIMIT_WINDOW_MINUTES}
+      - RATE_LIMIT_MAX_REQUESTS=${RATE_LIMIT_MAX_REQUESTS}
+      - TOKEN_REFRESH_LIMIT=${TOKEN_REFRESH_LIMIT}
+      - DATABASE_URL=${DATABASE_URL}
     volumes:
       - .:/app
       - /app/node_modules
@@ -28,18 +28,17 @@ services:
         condition: service_healthy
 
   db:
-    image: mysql:8.0
+    image: postgres:15-alpine
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: todo_db
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: password
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - "3307:3306"
+      - "${DB_PORT}:5432"
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
       retries: 5
 
