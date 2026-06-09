@@ -79,6 +79,7 @@ export const createTodo = async (req, res, next) => {
       data: {
         title: req.body.title,
         description: req.body.description,
+        color: req.body.color,
       },
     });
     return sendSuccess(res, 201, "Todo created successfully", response);
@@ -97,6 +98,7 @@ export const updateTodo = async (req, res, next) => {
         title: req.body.title,
         description: req.body.description,
         completed: Boolean(req.body.completed),
+        color: req.body.color,
       },
     });
     return sendSuccess(res, 200, "Todo updated successfully", response);
@@ -135,7 +137,7 @@ export const updateStatusTodo = async (req, res, next) => {
 };
 
 export const updateTodoAndItems = async (req, res, next) => {
-  const { title, description, todoItems } = req.body;
+  const { title, description, color, todoItems } = req.body;
   const todoId = parseInt(req.params.id);
   try {
     const response = await prisma.todo.update({
@@ -143,6 +145,7 @@ export const updateTodoAndItems = async (req, res, next) => {
       data: {
         title,
         description,
+        color,
         todoItems: {
           deleteMany: {}, // Hapus semua item yang ada
           create: todoItems, // Tambahkan item baru dari request

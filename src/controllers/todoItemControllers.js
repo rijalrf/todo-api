@@ -24,6 +24,7 @@ export const createTodoItem = async (req, res, next) => {
         todoId: todoId,
         title: req.body.title,
         description: req.body.description,
+        color: req.body.color,
       },
     });
     return sendSuccess(res, 201, "Todo item created successfully", response);
@@ -42,6 +43,7 @@ export const updateTodoItem = async (req, res, next) => {
         title: req.body.title,
         description: req.body.description,
         completed: Boolean(req.body.completed),
+        color: req.body.color,
       },
     });
     return sendSuccess(res, 200, "Todo item updated successfully", response);

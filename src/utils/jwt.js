@@ -2,12 +2,12 @@ import jwt from "jsonwebtoken";
 import { randomUUID } from "crypto";
 
 export const createToken = (email, userId) => {
-  const ACCESS_EXP = "1m";
-  const REFRESH_EXP = "1m";
+  const ACCESS_EXP = "15m";
+  const REFRESH_EXP = "7d";
 
   const accessToken = jwt.sign(
     {
-      sub: userId,
+      userId,
       email,
     },
     process.env.JWT_SECRET_ACCESS_TOKEN,
@@ -20,7 +20,7 @@ export const createToken = (email, userId) => {
   const jti = randomUUID();
   const refreshToken = jwt.sign(
     {
-      sub: userId,
+      userId,
       email,
       jti,
     },
@@ -43,11 +43,10 @@ export const createToken = (email, userId) => {
   };
 };
 
-export const verifAccessToken = (planToken) => {
-  const token = planToken.split(" ")[1];
-  const accessToken = jwt.verify(token, process.env.JWT_SECRET_ACCESS_TOKEN);
+export const verifAccessToken = (token) => {
+  const decoded = jwt.verify(token, process.env.JWT_SECRET_ACCESS_TOKEN);
 
-  return accessToken;
+  return decoded;
 };
 export const verifRefreshToken = (planToken) => {
   const refreshToken = jwt.verify(

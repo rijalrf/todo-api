@@ -1,12 +1,13 @@
 services:
-  express-todo-api:
+  todo-backend:
     build:
       context: .
       dockerfile: .docker/Dockerfile
+    container_name: todo-backend
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
-      - "${APP_PORT}:${APP_PORT}"
+      - "${APP_PORT}:8089"
     environment:
       - APP_PORT=${APP_PORT}
       - NODE_ENV=${NODE_ENV}
@@ -27,3 +28,8 @@ services:
       - /app/node_modules
     command: sh -c "npx prisma migrate deploy && npm run dev"
     restart: always
+    networks:
+      - todo-shared-network
+networks:
+   todo-shared-network:
+     external: true

@@ -54,11 +54,14 @@ export const registerValidator = checkSchema({
 });
 
 export const accessTokenValidator = checkSchema({
-  Authorization: {
+  authorization: {
     in: "headers",
-    isIn: ["Bearer "],
     notEmpty: {
-      errorMessage: "Unauthorization",
+      errorMessage: "Authorization header is required",
+    },
+    matches: {
+      options: /^Bearer\s+\S+$/,
+      errorMessage: "Authorization format must be 'Bearer <token>'",
     },
   },
 });
